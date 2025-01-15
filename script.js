@@ -1,28 +1,32 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const guessInput = document.getElementById('guess-input');
-    const guessButton = document.getElementById('guess-button');
-    const message = document.getElementById('message');
-    const attempts = document.getElementById('attempts');
+    // Create a scene
+    const scene = new THREE.Scene();
 
-    let randomNumber = Math.floor(Math.random() * 100) + 1;
-    let attemptCount = 0;
+    // Create a camera
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 5;
 
-    guessButton.addEventListener('click', () => {
-        const userGuess = Number(guessInput.value);
-        attemptCount++;
+    // Create a renderer
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
 
-        if (userGuess === randomNumber) {
-            message.textContent = `Congratulations! You guessed the number ${randomNumber} correctly in ${attemptCount} attempts.`;
-            message.style.color = 'green';
-            guessButton.disabled = true;
-        } else if (userGuess > randomNumber) {
-            message.textContent = 'Too high! Try again.';
-            message.style.color = 'red';
-        } else if (userGuess < randomNumber) {
-            message.textContent = 'Too low! Try again.';
-            message.style.color = 'red';
-        }
+    // Create a cube
+    const geometry = new THREE.BoxGeometry();
+    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    const cube = new THREE.Mesh(geometry, material);
+    scene.add(cube);
 
-        attempts.textContent = `Attempts: ${attemptCount}`;
-    });
+    // Animation loop
+    function animate() {
+        requestAnimationFrame(animate);
+
+        // Rotate the cube
+        cube.rotation.x += 0.01;
+        cube.rotation.y += 0.01;
+
+        renderer.render(scene, camera);
+    }
+
+    animate();
 });
